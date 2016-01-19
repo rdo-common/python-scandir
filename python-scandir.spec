@@ -106,6 +106,7 @@ popd
 %license LICENSE*
 %doc README* test benchmark.py
 %{python2_sitearch}/*
+%attr(755,root,root) %{python2_sitearch}/*.so
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{pkgname}
@@ -114,6 +115,7 @@ popd
 %doc README* test benchmark.py
 %exclude %dir %{python3_sitearch}/__pycache__
 %{python3_sitearch}/*
+%attr(755,root,root) %{python3_sitearch}/*.so
 %endif
 
 %changelog
@@ -121,7 +123,7 @@ popd
 - Updated to version 1.2
 - Use python2 macros instead of bare python macros
 - Changed Python2 package name to python2-scandir for Fedora 24+
-- Change python3 to python%{python3_pkgversion} for package names
+- Use python3_pkgversion for package names
 
 * Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
