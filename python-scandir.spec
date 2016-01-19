@@ -17,7 +17,7 @@
 
 Name:           python-%{pkgname}
 Version:        1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
@@ -130,7 +130,10 @@ popd
 %endif
 
 %changelog
-* Mon Jan 18 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2-1
+* Tue Jan 19 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-2
+- Fixed typos and logic in spec file
+
+* Mon Jan 18 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-1
 - Updated to version 1.2
 - Use python2 macros instead of bare python macros
 - Changed Python2 package name to python2-scandir for Fedora 24+
@@ -139,6 +142,6 @@ popd
 * Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
 
-* Wed Jul 22 2015 Avram Lubkin <avram@rockhopper.net> - 1.1-1
+* Wed Jul 22 2015 Avram Lubkin <aviso@fedoraproject.org> - 1.1-1
 - Initial package.
 
