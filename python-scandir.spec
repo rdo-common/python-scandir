@@ -22,7 +22,6 @@ Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
 License:        BSD
-
 BuildRequires:  python2-devel
 
 %if 0%{?with_python3}
@@ -49,6 +48,8 @@ include file type and stat information along with the name. Using scandir()
 increases the speed of os.walk() by 2-20 times (depending on the platform and
 file system) by avoiding unnecessary calls to os.stat() in most cases.
 scandir is included in the Python 3.5+ standard library.
+%else
+Provides:       python2-%{pkgname} = %{version}-%{release}
 %endif
 
 %if 0%{?with_python3}
@@ -101,12 +102,22 @@ rm -rf test/testdir
 popd
 %endif
 
+# For Fedora > 23 builds
+%if 0%{?with_p2subpkg}
+%files -n python2-%{pkgname}
+%{!?_licensedir:%global license %%doc}
+%license LICENSE*
+%doc README* test benchmark.py
+%{python2_sitearch}/*
+%attr(755,root,root) %{python2_sitearch}/*.so
+%else
 %files
 %{!?_licensedir:%global license %%doc}
 %license LICENSE*
 %doc README* test benchmark.py
 %{python2_sitearch}/*
 %attr(755,root,root) %{python2_sitearch}/*.so
+%endif
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{pkgname}
