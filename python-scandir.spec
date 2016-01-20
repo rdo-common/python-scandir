@@ -4,6 +4,10 @@
 %global with_python3 1
 %endif
 
+%if 0%{?epel} > 6
+%global with_python3 1
+%endif
+
 # Rename to python2-configparser after Fedora 23
 %if 0%{?fedora} > 23
   %global with_p2subpkg 1
@@ -17,7 +21,7 @@
 
 Name:           python-%{pkgname}
 Version:        1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
@@ -130,6 +134,9 @@ popd
 %endif
 
 %changelog
+* Tue Jan 20 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-3
+- Build Python3 package for el7+
+
 * Tue Jan 19 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-2
 - Fixed typos and logic in spec file
 
