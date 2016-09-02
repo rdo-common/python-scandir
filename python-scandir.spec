@@ -20,8 +20,8 @@
 %endif
 
 Name:           python-%{pkgname}
-Version:        1.2
-Release:        5%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
@@ -134,6 +134,9 @@ popd
 %endif
 
 %changelog
+* Fri Sep 02 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.3-1
+- Updated to 1.3 (bz#1370901)
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
