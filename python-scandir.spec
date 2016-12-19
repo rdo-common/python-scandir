@@ -21,7 +21,7 @@
 
 Name:           python-%{pkgname}
 Version:        1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
@@ -134,6 +134,9 @@ popd
 %endif
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.3-2
+- Rebuild for Python 3.6
+
 * Fri Sep 02 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.3-1
 - Updated to 1.3 (bz#1370901)
 
