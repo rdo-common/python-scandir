@@ -26,6 +26,7 @@ Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
 License:        BSD
+BuildRequires:  gcc
 BuildRequires:  python2-devel
 
 %if 0%{?with_python3}
