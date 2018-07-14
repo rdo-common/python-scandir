@@ -21,7 +21,7 @@
 
 Name:           python-%{pkgname}
 Version:        1.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A better directory iterator and faster os.walk() for Python
 URL:            https://github.com/benhoyt/scandir
 Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
@@ -135,6 +135,9 @@ popd
 %endif
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.7-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.7-2
 - Rebuilt for Python 3.7
 
