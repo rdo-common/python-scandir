@@ -1,140 +1,170 @@
-%global pkgname scandir
+%global pypi_name scandir
+%global sum   A better directory iterator and faster os.walk() for Python
+%global desc scandir() is a directory iteration function like os.listdir(), except that \
+instead of returning a list of bare filenames, it yields DirEntry objects that \
+include file type and stat information along with the name. Using scandir() \
+increases the speed of os.walk() by 2-20 times (depending on the platform and \
+file system) by avoiding unnecessary calls to os.stat() in most cases. \
+scandir is included in the Python 3.5+ standard library.
 
-%if 0%{?fedora} > 12
-%global with_python3 1
+%bcond_without python3
+
+# Drop Python 2 with Fedora 30 and EL8
+%if (0%{?fedora} && 0%{?fedora} < 30) || (0%{?rhel} && 0%{?rhel} < 8)
+  %bcond_without python2
+%else
+  %bcond_with python2
 %endif
 
-%if 0%{?epel} > 6
-%global with_python3 1
-%endif
 
-# Rename to python2-configparser after Fedora 23
-%if 0%{?fedora} > 23
-  %global with_p2subpkg 1
-%endif
-
-# __python2 macro doesn't exist for el6
-%if 0%{?el6}
-  %define __python2 %{__python}
-  %define python2_sitearch %{python_sitearch}
-%endif
-
-Name:           python-%{pkgname}
-Version:        1.7
-Release:        3%{?dist}
-Summary:        A better directory iterator and faster os.walk() for Python
+Name:           python-%{pypi_name}
+Version:        1.8
+Release:        1%{?dist}
+Summary:        %{sum}
 URL:            https://github.com/benhoyt/scandir
-Source:         %{url}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 License:        BSD
-BuildRequires:  gcc
-BuildRequires:  python2-devel
 
-%if 0%{?with_python3}
+BuildRequires:  gcc
+
+%if %{with python2}
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+
+# Additional build requirements for Python 2.6
+%if 0%{?el6}
+BuildRequires:  python-unittest2
+%endif
+%endif
+
+%if %{with python3}
 BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+%endif
+
+%if 0%{?with_python3_other}
+BuildRequires:  python%{python3_other_pkgversion}-devel
+BuildRequires:  python%{python3_other_pkgversion}-setuptools
 %endif
 
 %description
-scandir() is a directory iteration function like os.listdir(), except that
-instead of returning a list of bare filenames, it yields DirEntry objects that
-include file type and stat information along with the name. Using scandir()
-increases the speed of os.walk() by 2-20 times (depending on the platform and
-file system) by avoiding unnecessary calls to os.stat() in most cases.
-scandir is included in the Python 3.5+ standard library.
+%{desc}
 
-%if 0%{?with_p2subpkg}
-%package -n python2-%{pkgname}
-Summary:        A better directory iterator and faster os.walk() for Python
-%{?python_provide:%python_provide python2-%{pkgname}}
 
-%description -n python2-%{pkgname}
-scandir() is a directory iteration function like os.listdir(), except that
-instead of returning a list of bare filenames, it yields DirEntry objects that
-include file type and stat information along with the name. Using scandir()
-increases the speed of os.walk() by 2-20 times (depending on the platform and
-file system) by avoiding unnecessary calls to os.stat() in most cases.
-scandir is included in the Python 3.5+ standard library.
-%else
-Provides:       python2-%{pkgname} = %{version}-%{release}
+# Python 2 package
+%if %{with python2}
+%package -n     python2-%{pypi_name}
+
+Summary:        %{sum}
+%{?python_provide:%python_provide python2-%{pypi_name}}
+
+%description -n python2-%{pypi_name}
+%{desc}
 %endif
 
-%if 0%{?with_python3}
-%package -n python%{python3_pkgversion}-%{pkgname}
-Summary:        A better directory iterator and faster os.walk() for Python
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pkgname}}
+# Python 3 package
+%if %{with python3}
+%package -n     python%{python3_pkgversion}-%{pypi_name}
+Summary:        %{sum}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pkgname}
-scandir() is a directory iteration function like os.listdir(), except that
-instead of returning a list of bare filenames, it yields DirEntry objects that
-include file type and stat information along with the name. Using scandir()
-increases the speed of os.walk() by 2-20 times (depending on the platform and
-file system) by avoiding unnecessary calls to os.stat() in most cases.
-scandir is included in the Python 3.5+ standard library.
+%description -n python%{python3_pkgversion}-%{pypi_name}
+%{desc}
 %endif
+
+# Python 3 other package
+%if 0%{?with_python3_other}
+%package -n     python%{python3_other_pkgversion}-%{pypi_name}
+Summary:        %{sum}
+%{?python_provide:%python_provide python%{python3_other_pkgversion}-%{pypi_name}}
+
+%description -n python%{python3_other_pkgversion}-%{pypi_name}
+%{desc}
+%endif
+
 
 %prep
-%setup -q -n %{pkgname}-%{version}
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-%endif
+%setup -q -n %{pypi_name}-%{version}
+
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python2} setup.py build
-%if 0%{?with_python3}
-pushd %{py3dir}
-CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
-popd
+%if %{with python2}
+CFLAGS="$RPM_OPT_FLAGS" %py2_build
 %endif
+
+%if %{with python3}
+CFLAGS="$RPM_OPT_FLAGS" %py3_build
+%endif
+
+%if 0%{?with_python3_other}
+CFLAGS="$RPM_OPT_FLAGS" %py3_other_build
+%endif
+
 
 %install
-%{__python2} setup.py install --skip-build --root %{buildroot}
-%if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root %{buildroot}
-popd
+%if 0%{?with_python3_other}
+%{__python3_other} setup.py install --skip-build --root %{buildroot}
 %endif
+
+%if %{with python3}
+%{__python3} setup.py install --skip-build --root %{buildroot}
+%endif
+
+%if %{with python2}
+%{__python2} setup.py install --skip-build --root %{buildroot}
+%endif
+
 
 %check
-echo %{python3_sitearch}
-# Tests fail if unicode is not supported
 LANG=en_US.utf8
+%if %{with python2}
 %{__python2} test/run_tests.py
 rm -rf test/testdir
-%if 0%{?with_python3}
-pushd %{py3dir}
+%endif
+
+%if %{with python3}
 %{__python3} test/run_tests.py
 rm -rf test/testdir
-popd
 %endif
 
-# For Fedora > 23 builds
-%if 0%{?with_p2subpkg}
-%files -n python2-%{pkgname}
-%{!?_licensedir:%global license %%doc}
-%license LICENSE*
-%doc README* test benchmark.py
-%{python2_sitearch}/*
-%attr(755,root,root) %{python2_sitearch}/*.so
-%else
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE*
-%doc README* test benchmark.py
-%{python2_sitearch}/*
-%attr(755,root,root) %{python2_sitearch}/*.so
+%if 0%{?with_python3_other}
+%{__python3_other} setup.py test
+rm -rf test/testdir
 %endif
 
-%if 0%{?with_python3}
-%files -n python%{python3_pkgversion}-%{pkgname}
-%{!?_licensedir:%global license %%doc}
+
+%if %{with python2}
+%files -n python2-%{pypi_name}
 %license LICENSE*
 %doc README* test benchmark.py
-%exclude %dir %{python3_sitearch}/__pycache__
-%{python3_sitearch}/*
-%attr(755,root,root) %{python3_sitearch}/*.so
+%{python2_sitearch}/scandir*
+%attr(755,root,root) %{python2_sitearch}/_scandir*.so
 %endif
+
+%if %{with python3}
+%files -n python%{python3_pkgversion}-%{pypi_name}
+%license LICENSE*
+%doc README* test benchmark.py
+%{python3_sitearch}/scandir*
+%{python3_sitearch}/__pycache__/scandir*
+%attr(755,root,root) %{python3_sitearch}/_scandir*.so
+%endif
+
+%if 0%{?with_python3_other}
+%files -n python%{python3_other_pkgversion}-%{pypi_name}
+%license LICENSE*
+%doc README* test benchmark.py
+%{python3_other_sitearch}/scandir*
+%{python3_other_sitearch}/__pycache__/scandir*
+%attr(755,root,root) %{python3_other_sitearch}/_scandir*.so
+%endif
+
 
 %changelog
+* Sat Aug 04 2018 Avram Lubkin <aviso@fedoraproject.org> - 1.8-1
+- Updated to 1.8 (bz#1611869)
+- Rework spec for Python version conditionals and newer guidelines
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.7-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
@@ -168,7 +198,7 @@ popd
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
-* Tue Jan 20 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-3
+* Wed Jan 20 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-3
 - Build Python3 package for el7+
 
 * Tue Jan 19 2016 Avram Lubkin <aviso@fedoraproject.org> - 1.2-2
