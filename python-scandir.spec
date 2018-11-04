@@ -18,7 +18,7 @@ scandir is included in the Python 3.5+ standard library.
 
 
 Name:           python-%{pypi_name}
-Version:        1.8
+Version:        1.9.0
 Release:        1%{?dist}
 Summary:        %{sum}
 URL:            https://github.com/benhoyt/scandir
@@ -136,7 +136,7 @@ rm -rf test/testdir
 %if %{with python2}
 %files -n python2-%{pypi_name}
 %license LICENSE*
-%doc README* test benchmark.py
+%doc README* benchmark.py
 %{python2_sitearch}/scandir*
 %attr(755,root,root) %{python2_sitearch}/_scandir*.so
 %endif
@@ -144,7 +144,8 @@ rm -rf test/testdir
 %if %{with python3}
 %files -n python%{python3_pkgversion}-%{pypi_name}
 %license LICENSE*
-%doc README* test benchmark.py
+%doc README* benchmark.py
+
 %{python3_sitearch}/scandir*
 %{python3_sitearch}/__pycache__/scandir*
 %attr(755,root,root) %{python3_sitearch}/_scandir*.so
@@ -153,7 +154,7 @@ rm -rf test/testdir
 %if 0%{?with_python3_other}
 %files -n python%{python3_other_pkgversion}-%{pypi_name}
 %license LICENSE*
-%doc README* test benchmark.py
+%doc README* benchmark.py
 %{python3_other_sitearch}/scandir*
 %{python3_other_sitearch}/__pycache__/scandir*
 %attr(755,root,root) %{python3_other_sitearch}/_scandir*.so
@@ -161,6 +162,10 @@ rm -rf test/testdir
 
 
 %changelog
+* Sun Nov 04 2018 Avram Lubkin <aviso@fedoraproject.org> - 1.9.0-1
+- Updated to 1.9.0 (bz#1614995)
+- Don't include tests
+
 * Sat Aug 04 2018 Avram Lubkin <aviso@fedoraproject.org> - 1.8-1
 - Updated to 1.8 (bz#1611869)
 - Rework spec for Python version conditionals and newer guidelines
