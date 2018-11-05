@@ -9,8 +9,8 @@ scandir is included in the Python 3.5+ standard library.
 
 %bcond_without python3
 
-# Drop Python 2 with Fedora 30 and EL8
-%if (0%{?fedora} && 0%{?fedora} < 30) || (0%{?rhel} && 0%{?rhel} < 8)
+# Drop Python 2 with Fedora 31 and EL8
+%if (0%{?fedora} && 0%{?fedora} < 31) || (0%{?rhel} && 0%{?rhel} < 8)
   %bcond_without python2
 %else
   %bcond_with python2
@@ -19,7 +19,7 @@ scandir is included in the Python 3.5+ standard library.
 
 Name:           python-%{pypi_name}
 Version:        1.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        %{sum}
 URL:            https://github.com/benhoyt/scandir
 Source0:        https://files.pythonhosted.org/packages/source/s/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
@@ -162,6 +162,9 @@ rm -rf test/testdir
 
 
 %changelog
+* Mon Nov 05 2018 Avram Lubkin <aviso@fedoraproject.org> - 1.9.0-2
+- Restore python2-scandir in F30 (bz#1645935)
+
 * Sun Nov 04 2018 Avram Lubkin <aviso@fedoraproject.org> - 1.9.0-1
 - Updated to 1.9.0 (bz#1614995)
 - Don't include tests
