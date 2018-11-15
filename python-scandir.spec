@@ -1,3 +1,7 @@
+# This package depends on automagic byte compilation
+# https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
+%global _python_bytecompile_extra 1
+
 %global pypi_name scandir
 %global sum   A better directory iterator and faster os.walk() for Python
 %global desc scandir() is a directory iteration function like os.listdir(), except that \
