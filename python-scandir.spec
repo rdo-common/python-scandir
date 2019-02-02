@@ -23,7 +23,7 @@ scandir is included in the Python 3.5+ standard library.
 
 Name:           python-%{pypi_name}
 Version:        1.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        %{sum}
 URL:            https://github.com/benhoyt/scandir
 Source0:        https://files.pythonhosted.org/packages/source/s/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
@@ -166,6 +166,9 @@ rm -rf test/testdir
 
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Sun Nov 18 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.0-3
 - Use C.UTF-8 locale
   See https://fedoraproject.org/wiki/Changes/Remove_glibc-langpacks-all_from_buildroot
