@@ -11,7 +11,7 @@ increases the speed of os.walk() by 2-20 times (depending on the platform and \
 file system) by avoiding unnecessary calls to os.stat() in most cases. \
 scandir is included in the Python 3.5+ standard library.
 
-%bcond_without python3
+%bcond_with python3
 
 # Drop Python 2 with Fedora 31 and EL8
 %if (0%{?fedora} && 0%{?fedora} < 31) || (0%{?rhel} && 0%{?rhel} < 8)
@@ -120,14 +120,13 @@ CFLAGS="$RPM_OPT_FLAGS" %py3_other_build
 
 
 %check
-LANG=C.utf8
 %if %{with python2}
-%{__python2} test/run_tests.py
+LANG=en_US.utf8 %{__python2} test/run_tests.py
 rm -rf test/testdir
 %endif
 
 %if %{with python3}
-%{__python3} test/run_tests.py
+LANG=en_US.utf8 %{__python3} test/run_tests.py
 rm -rf test/testdir
 %endif
 
